@@ -27,6 +27,8 @@ class FileManager:
         f=open(self.path,"w")
         json.dump(d,f)
         f.close()
+def addNew():
+    x=0
 root=Tk()
 root.title("Pirate Database")
 title=Label(root,text="Pirate Database",font="BlackPearl")
@@ -35,7 +37,7 @@ namebox=Entry(root,font="BlackPearl")
 shiptext=Label(root,text="Ship",font="BlackPearl")
 fictext=Label(root,text="Fictional",font="BlackPearl")
 shipbox=Entry(root,font="BlackPearl")
-save=Button(root,text="SSSAAAVVVVEEEEE!!!!!!!!",font="BlackPearl")
+save=Button(root,text="SSSAAAVVVVEEEEE!!!!!!!!",font="BlackPearl",command=addNew)
 title.grid(row=0,column=0,columnspan=3)
 nametext.grid(row=1,column=0,columnspan=1)
 namebox.grid(row=1,column=1,columnspan=2)
