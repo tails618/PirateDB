@@ -1,5 +1,6 @@
 import json
 from tkinter import *
+from random import randint
 class Pirate:
     name=""
     ship=""
@@ -28,7 +29,16 @@ class FileManager:
         json.dump(d,f)
         f.close()
 def addNew():
-    x=0
+    p=Pirate()
+    p.name=namebox.get()
+    p.ship=shipbox.get()
+    p.fictional=optionString.get()
+    namebox.delete(0,"end")
+    shipbox.delete(0,"end")
+    d=p.getDict()
+    fm=FileManager()
+    idNum=randint(11111,99999)
+    fm.writeToFile(idNum,d)
 root=Tk()
 root.title("Pirate Database")
 title=Label(root,text="Pirate Database",font="BlackPearl")
