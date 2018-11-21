@@ -43,7 +43,7 @@ fm=firebasemanager.FirebaseManager()
 d=fm.getAllPirates()
 for item in d:
     pirate=d[item]
-    listbox.insert(EMD,pirate["name"])
+    listbox.insert(END,pirate["name"])
 
 def listDelete():
     listbox.delete(ANCHOR)
