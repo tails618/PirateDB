@@ -32,6 +32,13 @@ def doFilter():
         if (filt.lower() in d[pirate]["name"].lower() or filt.lower() in d[pirate]["ship"].lower()):
             listbox.insert(END,d[pirate]["name"])
 
+def display(pirateId):
+    label3.config(text=d[pirateId]["name"])
+    shipLabel.config(text=d[pirateId]["ship"])
+    if d[pirateId]["fictional"]=="True":
+        ficLabel.config(text="Fictional")
+    else:
+        ficLabel.config(text="Real")
 
 label3=Label(frame3,text="Frame 3",font=("Comic Sans MS", 12))
 label3.grid(row=0,column=0)
@@ -49,7 +56,16 @@ shipLabel.grid(row=2,column=1)
 ficLabel=Label(frame3,text="Fictional?",font=("Comic Sans MS",12))
 ficLabel.grid(row=3,column=1)
 
+def onselect(e):
+    w=e.widget
+    index=int(w.curselection()[0])
+    piratename=w.get(index)
+    for pirate in d:
+        if piratename.lower() == d[pirate]["name"].lower():
+            display(pirate)
+
 listbox=Listbox(frame4,font=("Comic Sans MS",12))
+listbox.bind("<<ListboxSelect>>",onselect)
 listbox.pack()
 fm=firebasemanager.FirebaseManager()
 d=fm.getAllPirates()
