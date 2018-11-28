@@ -15,11 +15,23 @@ label1.pack()
 label2=Label(frame2,text="Search",font=("Comic Sans MS", 12))
 label2.grid(row=0,column=0)
 
+def searchUpdate(e):
+    doFilter()
+
 entry=Entry(frame2)
+entry.bind("<KeyRelease>",searchUpdate)
 entry.grid(row=0,column=1)
 
-searchButton=Button(frame2,text="Go",font=("Comic Sans MS", 12))
-searchButton.grid(row=0,column=2)
+'''searchButton=Button(frame2,text="Go",font=("Comic Sans MS", 12))
+searchButton.grid(row=0,column=2)'''
+
+def doFilter():
+    filt=entry.get()
+    listbox.delete(0,"end")
+    for pirate in d:
+        if (filt.lower() in d[pirate]["name"].lower() or filt.lower() in d[pirate]["ship"].lower()):
+            listbox.insert(END,d[pirate]["name"])
+
 
 label3=Label(frame3,text="Frame 3",font=("Comic Sans MS", 12))
 label3.grid(row=0,column=0)
