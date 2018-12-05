@@ -39,13 +39,35 @@ def display(pirateId):
         ficLabel.config(text="Fictional")
     else:
         ficLabel.config(text="Real")
+def scrollRight():
+    index=int(listbox.curselection()[0])
+    listbox.selection_clear(index)
+    if index==len(d)-1:
+        index=0
+    else:
+        index+=1
+    updateListbox(index)
+def scrollLeft():
+    index=int(listbox.curselection()[0])
+    if index==0:
+        index=len(d)-1
+    else:
+        index-=1
+    listbox.selection_clear(index)
+    updateListbox(index)
+def updateListbox(index):
+    listbox.selection_set(index)
+    piratename=listbox.get(index)
+    for pirate in d:
+        if pirate.lower()==d[pirate]["name"].lower():
+            display(pirate)
 
 label3=Label(frame3,text="Frame 3",font=("Comic Sans MS", 12))
 label3.grid(row=0,column=0)
 leftImg=PhotoImage(file="arrow_left.gif")
 rightImg=PhotoImage(file="arrow_right.gif")
-leftButton=Button(frame3,image=leftImg)
-rightButton=Button(frame3,image=rightImg)
+leftButton=Button(frame3,image=leftImg,command=scrollLeft)
+rightButton=Button(frame3,image=rightImg,command=scrollRight)
 leftButton.grid(row=1,column=0)
 rightButton.grid(row=1,column=2)
 placeholder=PhotoImage(file="me.gif")
@@ -69,12 +91,29 @@ listbox.bind("<<ListboxSelect>>",onselect)
 listbox.pack()
 fm=firebasemanager.FirebaseManager()
 d=fm.getAllPirates()
+print(d)
 for item in d:
     pirate=d[item]
     listbox.insert(END,pirate["name"])
 
 def listDelete():
+    deletekey=""
+    index=int(listbox.curselection()[0])
+    listbox.selection_set(index)
+    piratename=listbox.get(index)
+    for pirate in d:
+        if pirate.lower()==d[pirate]["name"].lower():
+            #save the id because you can't delete while looping through a dictionary
+            deletekey=pirate
+    #use firebasemanager to delete from the db
+    fm.DeletePirate(deletekey)
+    #delete from dictionary
+    d.pop(deletekey)
     listbox.delete(ANCHOR)
+
+def ext():
+    window1.destroy()
+
 deleteButton=Button(frame4,text="Delete",font=("Comic Sans MS", 12),command=listDelete)
 deleteButton.pack()
 def quitWindow():
