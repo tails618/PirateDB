@@ -1,29 +1,13 @@
 from tkinter import *
 import firebasemanager
+import Pirate
 
 window1=Tk()
 
-#Make the stuff
 frame1=Frame(window1)
 frame2=Frame(window1)
 frame3=Frame(window1)
 frame4=Frame(window1)
-
-label1=Label(frame1,text="Pirate Database",font=("Comic Sans MS", 12))
-label1.pack()
-
-label2=Label(frame2,text="Search",font=("Comic Sans MS", 12))
-label2.grid(row=0,column=0)
-
-def searchUpdate(e):
-    doFilter()
-
-entry=Entry(frame2)
-entry.bind("<KeyRelease>",searchUpdate)
-entry.grid(row=0,column=1)
-
-'''searchButton=Button(frame2,text="Go",font=("Comic Sans MS", 12))
-searchButton.grid(row=0,column=2)'''
 
 def doFilter():
     filt=entry.get()
@@ -61,6 +45,84 @@ def updateListbox(index):
     for pirate in d:
         if pirate.lower()==d[pirate]["name"].lower():
             display(pirate)
+def searchUpdate(e):
+    doFilter()
+def listDelete():
+    deletekey=""
+    index=int(listbox.curselection()[0])
+    listbox.selection_set(index)
+    piratename=listbox.get(index)
+    for pirate in d:
+        if pirate.lower()==d[pirate]["name"].lower():
+            #save the id because you can't delete while looping through a dictionary
+            deletekey=pirate
+    #use firebasemanager to delete from the db
+    fm.DeletePirate(deletekey)
+    #delete from dictionary
+    d.pop(deletekey)
+    listbox.delete(ANCHOR)
+
+
+def onselect(e):
+    w=e.widget
+    try:
+        index=int(w.curselection()[0])
+        piratename=w.get(index)
+        for pirate in d:
+            if piratename.lower() == d[pirate]["name"].lower():
+                display(pirate)
+    except:
+        pass
+
+def new_pirate():
+    global window2
+    window2=Toplevel()
+    Pirate.loadwindow(window2)
+def fillListBox():
+    print(d)
+    for item in d:
+        pirate=d[item]
+        listbox.insert(END,pirate["name"])
+        updateListbox(0)
+def refresh_list():
+    print("Bla bla bla")
+    global d
+    #refresh the dictionary from Firebase
+    d=fm.getAll()
+    #clear out the listbox
+    listbox.delete(0,END)
+    #refill the list box
+    fillListBox()
+
+def ext():
+    window1.destroy()
+
+
+def quitWindow():
+    window1.destroy()
+exitButton=Button(frame4,text="Exit",font=("Comic Sans MS",12),command=quitWindow)
+exitButton.pack()
+
+
+#Make the stuff
+
+
+label1=Label(frame1,text="Pirate Database",font=("Comic Sans MS", 12))
+label1.pack()
+
+label2=Label(frame2,text="Search",font=("Comic Sans MS", 12))
+label2.grid(row=0,column=0)
+
+
+
+entry=Entry(frame2)
+entry.bind("<KeyRelease>",searchUpdate)
+entry.grid(row=0,column=1)
+
+'''searchButton=Button(frame2,text="Go",font=("Comic Sans MS", 12))
+searchButton.grid(row=0,column=2)'''
+
+
 
 label3=Label(frame3,text="Frame 3",font=("Comic Sans MS", 12))
 label3.grid(row=0,column=0)
@@ -78,48 +140,22 @@ shipLabel.grid(row=2,column=1)
 ficLabel=Label(frame3,text="Fictional?",font=("Comic Sans MS",12))
 ficLabel.grid(row=3,column=1)
 
-def onselect(e):
-    w=e.widget
-    index=int(w.curselection()[0])
-    piratename=w.get(index)
-    for pirate in d:
-        if piratename.lower() == d[pirate]["name"].lower():
-            display(pirate)
 
 listbox=Listbox(frame4,font=("Comic Sans MS",12))
 listbox.bind("<<ListboxSelect>>",onselect)
 listbox.pack()
 fm=firebasemanager.FirebaseManager()
-d=fm.getAllPirates()
-print(d)
-for item in d:
-    pirate=d[item]
-    listbox.insert(END,pirate["name"])
+d=fm.getAll()
 
-def listDelete():
-    deletekey=""
-    index=int(listbox.curselection()[0])
-    listbox.selection_set(index)
-    piratename=listbox.get(index)
-    for pirate in d:
-        if pirate.lower()==d[pirate]["name"].lower():
-            #save the id because you can't delete while looping through a dictionary
-            deletekey=pirate
-    #use firebasemanager to delete from the db
-    fm.DeletePirate(deletekey)
-    #delete from dictionary
-    d.pop(deletekey)
-    listbox.delete(ANCHOR)
-
-def ext():
-    window1.destroy()
-
-deleteButton=Button(frame4,text="Delete",font=("Comic Sans MS", 12),command=listDelete)
+fillListBox()
+deleteButton=Button(frame4,text="Delete",font=("Comic Sans MS",12),command=listDelete)
 deleteButton.pack()
-def quitWindow():
-    window1.destroy()
-exitButton=Button(frame4,text="Exit",font=("Comic Sans MS",12),command=quitWindow)
-exitButton.pack()
+newButton=Button(frame4,text="New Pirate",font=("Comic Sans MS",12),command=new_pirate)
+newButton.pack()
+refreshButton=Button(frame4,text="Refresh",font=("Comic Sans MS",12),command=refresh_list)
+refreshButton.pack()
+
+
 
 #Grid the stuff
 frame1.grid(row=0,column=0)
