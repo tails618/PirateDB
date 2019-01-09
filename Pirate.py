@@ -9,7 +9,8 @@ class Pirate:
     def getDict(self):
         d={"name": self.name,
            "ship": self.ship,
-           "fictional": self.fictional
+           "fictional": self.fictional,
+           "img": self.image
           }
         return d
     def loadFromDict(self,d):
@@ -38,8 +39,12 @@ def Canc():
     global win
     win.destroy()
 
+def browseImage():
+    global win,nText,nShip,optionString,lbImage
+    win=root
+
 def loadwindow(root):
-    global win, namebox, shipbox, optionString
+    global win, namebox, shipbox, optionString, lbImage
     win=root
     root.title("Pirate Database")
     root.title("Pirate Database")
@@ -51,14 +56,18 @@ def loadwindow(root):
     shipbox=Entry(root,font="BlackPearl")
     save=Button(root,text="SSSAAAVVVVEEEEE!!!!!!!!",font="BlackPearl",command=addNew)
     cancel=Button(root,text="Cancel...?",font="BlackPearl",command=Canc)
-    cancel.grid(row=4,column=0)
+    cancel.grid(row=5,column=0)
+    imgSelect=Button(root,font="BlackPearl", text="Select an Image", bg="lightGreen",command=browseImage)
+    lbImage=Label(root,text="",font="BlackPearl")
+    imgSelect.grid(row=4,column=0)
+    lbImage.grid(row=4,column=1)
     title.grid(row=0,column=0,columnspan=3)
     nametext.grid(row=1,column=0,columnspan=1)
     namebox.grid(row=1,column=1,columnspan=2)
     shiptext.grid(row=2,column=0,columnspan=1)
     shipbox.grid(row=2,column=1,columnspan=2)
     fictext.grid(row=3,column=0,columnspan=1)
-    save.grid(row=4,column=1,columnspan=2)
+    save.grid(row=5,column=1,columnspan=2)
     optionString=StringVar(root)
     optionString.set("True")
     dropdown=OptionMenu(root,optionString,"True","False")
