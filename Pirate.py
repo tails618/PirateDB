@@ -1,22 +1,26 @@
 import json
 from tkinter import *
 from random import randint
+from tkinter import filedialog
 from firebase import firebase as fb
+import os
 class Pirate:
     name=""
     ship=""
     fictional=False
+    image=""
     def getDict(self):
         d={"name": self.name,
            "ship": self.ship,
            "fictional": self.fictional,
-           "img": self.image
+           "image": self.image
           }
         return d
     def loadFromDict(self,d):
         self.name=d["name"]
         self.ship=d["ship"]
         self.fictional=d["fictional"]
+        self.image=f["image"]
 class FirebaseManager:
     app=fb.FirebaseApplication("https://piratedb-f3ec8.firebaseio.com/",None)
     def writeToFile(self,idNum,obj):
@@ -27,6 +31,7 @@ def addNew():
     p.name=namebox.get()
     p.ship=shipbox.get()
     p.fictional=optionString.get()
+    p.image=lbImage.cget("text")
     namebox.delete(0,"end")
     shipbox.delete(0,"end")
     d=p.getDict()
@@ -40,8 +45,10 @@ def Canc():
     win.destroy()
 
 def browseImage():
-    global win,nText,nShip,optionString,lbImage
-    win=root
+    global win,lbImage
+    win.filename=filedialog.askopenfilename()
+    justfile=os.path.basename(win.filename)
+    lbImage.config(text=justfile)
 
 def loadwindow(root):
     global win, namebox, shipbox, optionString, lbImage
