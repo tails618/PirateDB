@@ -1,6 +1,7 @@
 from tkinter import *
 import firebasemanager
 import Pirate
+import imageManager
 
 window1=Tk()
 
@@ -23,6 +24,19 @@ def display(pirateId):
         ficLabel.config(text="Fictional")
     else:
         ficLabel.config(text="Real")
+    #show the image
+    im=imageManager.ImageManager()
+    #handle pirates with no images
+    '''try:'''
+    im.url=d[pirateId]["img"]
+    '''except:
+        pass'''
+    if im.url !="":
+        img=im.downloadUrl()
+        piratePic.config(image=img)
+        piratePic.image=img #TKinterJustNeedsThis #LOL
+    else:
+        piratePic.config(image=placeholder)
 def scrollRight():
     index=int(listbox.curselection()[0])
     listbox.selection_clear(index)

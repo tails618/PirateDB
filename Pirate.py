@@ -26,14 +26,21 @@ class FirebaseManager:
     def writeToFile(self,idNum,obj):
         result=self.app.put("",idNum,obj)
 def addNew():
-    global win, namebox, shipbox, optionString
+    global win, namebox, shipbox, optionString, lbImage
     p=Pirate()
     p.name=namebox.get()
     p.ship=shipbox.get()
     p.fictional=optionString.get()
-    p.image=lbImage.cget("text")
+    #p.image=lbImage.cget("text")
+    imgr.im.ImageManager()
+    imgr.imagepath=win.filename
+    imgr.uploadImage
+    p.image=imgr.url
+    print(imgr.url)
     namebox.delete(0,"end")
     shipbox.delete(0,"end")
+    optionString.set("")
+    lbImage.config(text="")
     d=p.getDict()
     fm=FirebaseManager()
     idNum=randint(11111,99999)
