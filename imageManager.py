@@ -1,7 +1,7 @@
 from google.cloud import storage
-import os
+import os, io, urllib
 import datetime
-
+from PIL import Image, ImageTk
 class ImageManager:
 #this tells the project where to find the credentials we downloaded
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="pirateDB-a1c1dd245fa5.json"
@@ -15,3 +15,7 @@ class ImageManager:
         d=datetime.datetime(2006,12,18)
         self.url=imageBlob.generate_signed_url(d)
     def downloadUrl(self):
+        rawdata=urllib.request.urlopen(self.url).read()
+        img=Image.open(io.BytesIO(rawdata))
+        tkimg=ImageTk.PhotoImage(img)
+        return tkimg
