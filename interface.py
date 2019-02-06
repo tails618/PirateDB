@@ -55,7 +55,7 @@ def listDelete():
     for pirate in d:
         if pirate.lower()==d[pirate]["name"].lower():
             #save the id because you can't delete while looping through a dictionary
-            deletekey=pirate
+            deletekey=piratename
     #use firebasemanager to delete from the db
     fm.DeletePirate(deletekey)
     #delete from dictionary

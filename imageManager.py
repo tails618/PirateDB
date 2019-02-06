@@ -1,6 +1,7 @@
 from google.cloud import storage
 import os
-import fatetime
+import datetime
+
 class ImageManager:
 #this tells the project where to find the credentials we downloaded
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="pirateDB-a1c1dd245fa5.json"
@@ -9,7 +10,8 @@ class ImageManager:
     url=''
     imagepath="me.gif"
     def uploadImage(self):
-        imageBlob=bucket.blob("images/"+imagepath)
-        imageBlob.upload_from_filename(imagepath)
+        imageBlob=self.bucket.blob("images/"+os.path.basename(self.imagepath))
+        imageBlob.upload_from_filename(self.imagepath)
         d=datetime.datetime(2006,12,18)
         self.url=imageBlob.generate_signed_url(d)
+    def downloadUrl(self):
