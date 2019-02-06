@@ -3,6 +3,7 @@ from tkinter import *
 from random import randint
 from tkinter import filedialog
 from firebase import firebase as fb
+import imageManager as im
 import os
 class Pirate:
     name=""
@@ -32,9 +33,9 @@ def addNew():
     p.ship=shipbox.get()
     p.fictional=optionString.get()
     #p.image=lbImage.cget("text")
-    imgr.im.ImageManager()
+    imgr=im.ImageManager()
     imgr.imagepath=win.filename
-    imgr.uploadImage
+    imgr.uploadImage()
     p.image=imgr.url
     print(imgr.url)
     namebox.delete(0,"end")

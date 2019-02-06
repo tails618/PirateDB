@@ -27,10 +27,10 @@ def display(pirateId):
     #show the image
     im=imageManager.ImageManager()
     #handle pirates with no images
-    '''try:'''
-    im.url=d[pirateId]["img"]
-    '''except:
-        pass'''
+    try:
+        im.url=d[pirateId]["image"]
+    except:
+        pass
     if im.url !="":
         img=im.downloadUrl()
         piratePic.config(image=img)
@@ -44,32 +44,33 @@ def scrollRight():
         index=0
     else:
         index+=1
+
     updateListbox(index)
 def scrollLeft():
     index=int(listbox.curselection()[0])
+    listbox.selection_clear(index)
     if index==0:
         index=len(d)-1
     else:
         index-=1
-    listbox.selection_clear(index)
     updateListbox(index)
 def updateListbox(index):
     listbox.selection_set(index)
     piratename=listbox.get(index)
     for pirate in d:
-        if pirate.lower()==d[pirate]["name"].lower():
+        if piratename.lower()==d[pirate]["name"].lower():
             display(pirate)
 def searchUpdate(e):
     doFilter()
 def listDelete():
-    deletekey=""
+    #deletekey=""
     index=int(listbox.curselection()[0])
     listbox.selection_set(index)
     piratename=listbox.get(index)
     for pirate in d:
-        if pirate.lower()==d[pirate]["name"].lower():
+        if piratename.lower()==d[pirate]["name"].lower():
             #save the id because you can't delete while looping through a dictionary
-            deletekey=piratename
+            deletekey=pirate
     #use firebasemanager to delete from the db
     fm.DeletePirate(deletekey)
     #delete from dictionary
@@ -93,11 +94,12 @@ def new_pirate():
     window2=Toplevel()
     Pirate.loadwindow(window2)
 def fillListBox():
+    global d
     print(d)
     for item in d:
         pirate=d[item]
-        listbox.insert(END,pirate["name"])
-        updateListbox(0)
+        listbox.insert(END, pirate["name"])
+    updateListbox(0)
 def refresh_list():
     print("Bla bla bla")
     global d
